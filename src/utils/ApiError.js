@@ -1,17 +1,24 @@
-function ApiError(statusCode, message = "Something Went Wrong!", errors = [], stack = "") {
-    const apiError = new Error(message);
-    apiError.statusCode = statusCode;
-    apiError.data = null;
-    apiError.success = false;
-    apiError.errors = errors;
+class ApiError extends Error {
+    constructor(
+        statusCode,
+        message= "Something went wrong",
+        errors = [],
+        stack = ""
+    ){
+        super(message)
+        this.statusCode = statusCode
+        this.data = null
+        this.message = message
+        this.success = false;
+        this.errors = errors
 
-    if (stack) {
-        apiError.stack = stack;
-    } else {
-        Error.captureStackTrace(apiError, createApiError);
+        if (stack) {
+            this.stack = stack
+        } else{
+            Error.captureStackTrace(this, this.constructor)
+        }
+
     }
-
-    return apiError;
 }
 
-export { ApiError };
+export {ApiError}
